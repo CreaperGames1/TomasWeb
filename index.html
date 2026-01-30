@@ -6,13 +6,8 @@
   <title>Christmas Web</title>
 
   <style>
-    /* ===== ZÁKLADNÍ STYL + NAVBAR ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    /* základní reset + vánoční pozadí */
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: Arial, sans-serif;
       background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
@@ -22,318 +17,97 @@
       position: relative;
     }
 
-    /* ===== NAVBAR ===== */
+    /* NAVBAR */
     .navbar {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
+      top: 0; left: 0; width: 100%;
       background: linear-gradient(135deg, #b22222, #006400);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       z-index: 1000;
     }
-
     .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      max-width: 1200px; margin: 0 auto; padding: 0 20px;
+      display: flex; justify-content: space-between; align-items: center;
       height: 70px;
     }
-
     .logo {
-      color: white;
-      font-size: 1.8rem;
-      font-weight: bold;
-      text-decoration: none;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-      transition: transform 0.3s;
+      color: white; font-size: 1.8rem; font-weight: bold;
+      text-decoration: none; text-shadow: 0 0 10px rgba(255,255,255,0.8);
     }
-
-    .logo:hover {
-      transform: scale(1.08);
-      color: #ffd700;
-    }
-
+    .logo:hover { color: #ffd700; }
     .nav-links {
-      list-style: none;
-      display: flex;
-      gap: 35px;
-      margin: 0;
-      padding: 0;
+      list-style: none; display: flex; gap: 35px; margin: 0; padding: 0;
     }
-
-    .nav-links li a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: 500;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: all 0.3s;
-      position: relative;
+    .nav-links a {
+      color: white; text-decoration: none; font-size: 1.1rem;
+      padding: 8px 12px; border-radius: 6px; position: relative;
     }
-
-    .nav-links li a:hover,
-    .nav-links li a.active {
-      background: rgba(255, 255, 255, 0.15);
-      color: #fff200;
+    .nav-links a:hover, .nav-links a.active {
+      background: rgba(255,255,255,0.15); color: #fff200;
     }
-
-    .nav-links li a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 3px;
-      bottom: -6px;
-      left: 50%;
-      background: #ffd700;
-      transition: all 0.4s ease;
-      transform: translateX(-50%);
-      box-shadow: 0 0 12px #ffd700;
-    }
-
-    .nav-links li a:hover::after,
-    .nav-links li a.active::after {
-      width: 70%;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      cursor: pointer;
-    }
-
+    .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
     .hamburger span {
-      width: 28px;
-      height: 4px;
-      background: white;
-      border-radius: 3px;
-      transition: all 0.3s;
-      box-shadow: 0 0 6px rgba(255,255,255,0.7);
+      width: 28px; height: 4px; background: white; border-radius: 3px;
     }
-
     @media (max-width: 768px) {
       .nav-links {
-        position: absolute;
-        top: 70px;
-        left: 0;
-        width: 100%;
-        background: #006400;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        padding: 30px 0;
-        transform: translateY(-100%);
+        position: absolute; top: 70px; left: 0; width: 100%;
+        background: #006400; flex-direction: column; align-items: center;
+        gap: 20px; padding: 30px 0; transform: translateY(-100%);
         transition: transform 0.4s ease;
       }
-
-      .nav-links.active {
-        transform: translateY(0);
-      }
-
-      .hamburger {
-        display: flex;
-      }
+      .nav-links.active { transform: translateY(0); }
+      .hamburger { display: flex; }
     }
 
-    /* ===== TVŮJ PŮVODNÍ OBSAH – uprav si podle potřeby ===== */
-    .garland {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 60px;
-      pointer-events: none;
-      z-index: 999;
-    }
-
+    /* zbytek stylů (garland, strom, sníh, popup atd.) – zkráceně */
+    .garland { position:fixed; top:0; width:100%; height:60px; pointer-events:none; z-index:999; }
     .garland span {
-      position: absolute;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, transparent, #ff69b4, #00ffff, #ffff00, #ff69b4, transparent);
-      box-shadow: 0 0 15px #ff69b4;
+      position:absolute; width:100%; height:4px;
+      background: linear-gradient(90deg, transparent, #ff69b4, #00ffff, #ffff00, transparent);
       animation: garland-move 12s linear infinite;
     }
+    @keyframes garland-move { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-    @keyframes garland-move {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
+    .welcome-text { text-align:center; margin-top:120px; font-size:3.5rem; color:#ffd700; text-shadow:0 0 20px #ff4500; }
+    .search-box { text-align:center; margin:30px 0; }
+    .search-box input { padding:12px 20px; width:350px; max-width:90%; border-radius:30px; border:none; }
 
-    .garland span:nth-child(odd) { animation-delay: -6s; }
-
-    .welcome-text {
-      text-align: center;
-      margin-top: 120px;
-      font-size: 3.5rem;
-      color: #ffd700;
-      text-shadow: 0 0 20px #ff4500;
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #fff, 0 0 20px #ff4500; }
-      to   { text-shadow: 0 0 20px #fff, 0 0 40px #ff4500; }
-    }
-
-    .search-box {
-      text-align: center;
-      margin: 30px 0;
-    }
-
-    .search-box input {
-      padding: 12px 20px;
-      width: 350px;
-      max-width: 90%;
-      border: none;
-      border-radius: 30px;
-      font-size: 1.1rem;
-    }
-
-    .music-result {
-      text-align: center;
-      margin: 40px 0;
-      font-size: 1.3rem;
-    }
-
-    .music-result button {
-      margin: 10px;
-      padding: 10px 25px;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    .window {
-      text-align: center;
-      margin: 40px 0;
-    }
-
-    .window img {
-      width: 180px;
-      transition: transform 0.3s;
-    }
-
-    .window img:hover {
-      transform: scale(1.1);
-    }
+    .music-result { text-align:center; margin:40px 0; }
+    .music-result button { margin:10px; padding:10px 25px; cursor:pointer; }
 
     .login-btn, .register-btn, #logoutBtn {
-      position: fixed;
-      top: 85px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      border-radius: 6px;
-      color: white;
+      position: fixed; top: 85px; padding:10px 20px; font-size:1rem;
+      cursor:pointer; border:none; border-radius:6px; color:white;
     }
-
-    .login-btn { right: 180px; background: #006400; }
-    .register-btn { right: 80px; background: #b22222; }
-    #logoutBtn { right: 20px; background: #8b0000; display: none; }
-
-    .tree {
-      width: 300px;
-      margin: 80px auto;
-      position: relative;
-    }
-
-    .tree-top, .tree-middle, .tree-bottom {
-      width: 0;
-      height: 0;
-      margin: 0 auto;
-      border-left: 120px solid transparent;
-      border-right: 120px solid transparent;
-    }
-
-    .tree-top { border-bottom: 180px solid #006400; }
-    .tree-middle { border-bottom: 160px solid #228b22; }
-    .tree-bottom { border-bottom: 140px solid #006400; }
-
-    .lights span {
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      background: #ffff00;
-      border-radius: 50%;
-      box-shadow: 0 0 15px #ffff00;
-      animation: blink 3s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 1; }
-    }
-
-    .trunk {
-      width: 60px;
-      height: 100px;
-      background: #8b4513;
-      margin: 0 auto;
-    }
-
-    #snow {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
+    .login-btn { right:180px; background:#006400; }
+    .register-btn { right:80px; background:#b22222; }
+    #logoutBtn { right:20px; background:#8b0000; display:none; }
 
     .login-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.85);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(255,215,0,0.5);
-      z-index: 2000;
-      display: none;
-      text-align: center;
-      width: 320px;
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+      background:rgba(0,0,0,0.85); padding:30px; border-radius:12px;
+      box-shadow:0 0 30px rgba(255,215,0,0.5); z-index:2000; display:none;
+      text-align:center; width:320px;
     }
+    .login-popup input { display:block; width:100%; margin:12px 0; padding:12px; border-radius:6px; border:none; }
+    .login-popup button { margin:10px 5px; padding:10px 20px; cursor:pointer; }
 
-    .login-popup input {
-      display: block;
-      width: 100%;
-      margin: 12px 0;
-      padding: 12px;
-      border-radius: 6px;
-      border: none;
-    }
-
-    .login-popup button {
-      margin: 10px 5px;
-      padding: 10px 20px;
-      cursor: pointer;
-    }
+    #snow { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; }
   </style>
 </head>
 <body>
 
-  <!-- ===== NAVBAR ===== -->
+  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="nav-container">
       <a href="#" class="logo">🎄 Christmas Web</a>
-      
       <ul class="nav-links">
         <li><a href="#" class="active">Home</a></li>
         <li><a href="chcickengame.html">Games</a></li>
       </ul>
-
       <div class="hamburger" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </div>
     </div>
   </nav>
@@ -346,152 +120,166 @@
   </div>
 
   <!-- Welcome -->
-  <h1 id="welcomeMessage" class="welcome-text"></h1>
+  <h1 id="welcomeMessage" class="welcome-text">Veselé Vánoce!</h1>
 
   <!-- Search -->
   <div class="search-box">
     <input type="text" placeholder="Search..." onkeydown="handleSearch(event)">
   </div>
 
-  <!-- MUSIC RESULT -->
+  <!-- Music -->
   <div class="music-result" id="musicResult">
-    <p>SongsAreInfinite enjoy the song</p>
+    <p>🎄 Christmas Songs</p>
     <button onclick="playMusic()">▶ Play</button>
     <button onclick="pauseMusic()">⏸ Pause</button>
-    <audio id="christmasAudio">
-      <source src="letme.webm" type="audio/mp4">
-      <source src="letme.webm" type="audio/mp4">
+    <audio id="christmasAudio" loop>
+      <source src="......" type="audio/mp4">
     </audio>
   </div>
 
-  <!-- YouTube window -->
-  <div class="window">
-    <a href="https://www.youtube.com/@SongsAreINfinite" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube">
-    </a>
-  </div>
-
-  <!-- Buttons -->
-  <button class="login-btn" onclick="openLogin()">Login</button>
-  <button class="register-btn" onclick="openRegister()">Register</button>
+  <!-- Login / Register / Logout buttons -->
+  <button class="login-btn" id="loginBtn" onclick="openLogin()">Login</button>
+  <button class="register-btn" id="registerBtn" onclick="openRegister()">Register</button>
   <button id="logoutBtn" onclick="logout()">Logout</button>
-
-  <!-- Tree -->
-  <div class="tree" id="tree">
-    <div class="tree-top"></div>
-    <div class="tree-middle"></div>
-    <div class="tree-bottom"></div>
-    <div class="lights">
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span>
-    </div>
-    <div class="trunk"></div>
-  </div>
-
-  <!-- Snow -->
-  <canvas id="snow"></canvas>
 
   <!-- Login Popup -->
   <div class="login-popup" id="loginPopup">
     <h2>Login</h2>
     <input id="username" placeholder="Username">
     <input id="password" type="password" placeholder="Password">
-    <label><input type="checkbox" id="stayLogged"> Stay logged in</label>
     <button onclick="login()">Login</button>
     <button onclick="closeLogin()">Close</button>
-    <p id="loginMessage"></p>
+    <p id="loginMessage" style="color:#ff4444;"></p>
   </div>
 
   <!-- Register Popup -->
   <div class="login-popup" id="registerPopup">
     <h2>Register</h2>
     <input id="newUsername" placeholder="Username">
-    <input id="newPassword" type="password">
+    <input id="newPassword" type="password" placeholder="Password">
     <button onclick="register()">Register</button>
     <button onclick="closeRegister()">Close</button>
-    <p id="registerMessage"></p>
+    <p id="registerMessage" style="color:#ff4444;"></p>
   </div>
 
+  <!-- Snow canvas -->
+  <canvas id="snow"></canvas>
+
   <script>
-    // ===== Hamburger menu =====
+    // Hamburger menu
     function toggleMenu() {
       document.querySelector('.nav-links').classList.toggle('active');
     }
 
-    // ===== Placeholder funkce – doplň si logiku =====
-    function handleSearch(event) {
-      if (event.key === 'Enter') {
-        alert("Hledáš: " + event.target.value);
-      }
-    }
+    // Music controls
+    const audio = document.getElementById('christmasAudio');
+    function playMusic() { audio.play(); }
+    function pauseMusic() { audio.pause(); }
 
-    function playMusic() {
-      document.getElementById('christmasAudio').play();
-    }
-
-    function pauseMusic() {
-      document.getElementById('christmasAudio').pause();
-    }
-
+    // Popups
     function openLogin()  { document.getElementById('loginPopup').style.display = 'block'; }
     function closeLogin() { document.getElementById('loginPopup').style.display = 'none'; }
     function openRegister()  { document.getElementById('registerPopup').style.display = 'block'; }
     function closeRegister() { document.getElementById('registerPopup').style.display = 'none'; }
 
+    // Jednoduché přihlašování / registrace (localStorage)
     function login() {
-      alert("Login funkce – zatím placeholder");
-      // sem přidej reálnou logiku
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const savedPassword = localStorage.getItem('user_' + username);
+
+      if (!username || !password) {
+        document.getElementById('loginMessage').textContent = 'Vyplňte všechna pole!';
+        return;
+      }
+
+      if (savedPassword && savedPassword === password) {
+        localStorage.setItem('loggedInUser', username);
+        updateUIAfterLogin();
+        closeLogin();
+        document.getElementById('loginMessage').textContent = '';
+      } else {
+        document.getElementById('loginMessage').textContent = 'Špatné uživatelské jméno nebo heslo!';
+      }
     }
 
     function register() {
-      alert("Register funkce – zatím placeholder");
+      const username = document.getElementById('newUsername').value.trim();
+      const password = document.getElementById('newPassword').value.trim();
+
+      if (!username || !password) {
+        document.getElementById('registerMessage').textContent = 'Vyplňte všechna pole!';
+        return;
+      }
+
+      if (localStorage.getItem('user_' + username)) {
+        document.getElementById('registerMessage').textContent = 'Uživatel už existuje!';
+        return;
+      }
+
+      localStorage.setItem('user_' + username, password);
+      document.getElementById('registerMessage').textContent = 'Registrace úspěšná! Teď se můžete přihlásit.';
+      setTimeout(closeRegister, 1500);
     }
 
     function logout() {
-      alert("Odhlášení");
+      localStorage.removeItem('loggedInUser');
       document.getElementById('logoutBtn').style.display = 'none';
+      document.getElementById('loginBtn').style.display = 'block';
+      document.getElementById('registerBtn').style.display = 'block';
+      document.getElementById('welcomeMessage').textContent = 'Veselé Vánoce!';
     }
 
-    // ===== Sníh (jednoduchý canvas) =====
-    const canvas = document.getElementById('snow');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let snowflakes = [];
-    for (let i = 0; i < 100; i++) {
-      snowflakes.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 4 + 1,
-        speed: Math.random() * 1 + 0.5
-      });
+    function updateUIAfterLogin() {
+      const user = localStorage.getItem('loggedInUser');
+      if (user) {
+        document.getElementById('welcomeMessage').textContent = `Vítej zpět, ${user}! 🎅`;
+        document.getElementById('logoutBtn').style.display = 'block';
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('registerBtn').style.display = 'none';
+      }
     }
 
-    function drawSnow() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'white';
-      ctx.shadowBlur = 5;
-      ctx.shadowColor = 'white';
+    // Kontrola při načtení stránky
+    window.onload = () => {
+      updateUIAfterLogin();
 
-      snowflakes.forEach(s => {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        s.y += s.speed;
-        if (s.y > canvas.height) s.y = 0;
-      });
-
-      requestAnimationFrame(drawSnow);
-    }
-
-    drawSnow();
-
-    window.addEventListener('resize', () => {
+      // Sníh
+      const canvas = document.getElementById('snow');
+      const ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-    });
+
+      let flakes = [];
+      for (let i = 0; i < 120; i++) {
+        flakes.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 4 + 1,
+          speed: Math.random() * 1 + 0.5
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        flakes.forEach(f => {
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+          ctx.fill();
+          f.y += f.speed;
+          if (f.y > canvas.height) f.y = 0;
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    };
+
+    function handleSearch(e) {
+      if (e.key === 'Enter') {
+        alert('Hledáš: ' + e.target.value);
+      }
+    }
   </script>
 
 </body>
