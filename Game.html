@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - Hraj Nejlepší Online Hry Zdarma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #F7931E;
+            --accent: #FEC62E;
+            --dark: #1A1A2E;
+            --card-bg: #252541;
+            --hover: #FF8C61;
+            --text-light: #E8E8F0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite;
+        }
+
+        .particle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 3s;
+        }
+
+        .particle:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 30%;
+            left: 70%;
+            animation-delay: 6s;
+        }
+
+        .particle:nth-child(4) {
+            width: 50px;
+            height: 50px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 9s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-50px) rotate(180deg);
+            }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 2rem;
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.2);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: pulse 3s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            background: rgba(37, 37, 65, 0.8);
+            color: var(--text-light);
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(254, 198, 46, 0.3);
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(232, 232, 240, 0.5);
+        }
+
+        /* Navigation */
+        nav {
+            position: relative;
+            z-index: 10;
+            padding: 1rem 2rem;
+            background: rgba(37, 37, 65, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .nav-content::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .nav-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .category-btn {
+            padding: 0.7rem 1.5rem;
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 5;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Games Grid */
+        .games-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 5px;
+            height: 35px;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            border-radius: 3px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            animation: slideIn 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+        .game-card:nth-child(5) { animation-delay: 0.5s; }
+        .game-card:nth-child(6) { animation-delay: 0.6s; }
+        .game-card:nth-child(7) { animation-delay: 0.7s; }
+        .game-card:nth-child(8) { animation-delay: 0.8s; }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .game-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-thumbnail::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            top: -50%;
+            left: -50%;
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .game-thumbnail.racing {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .game-thumbnail.math {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .game-thumbnail.action {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .game-thumbnail.puzzle {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        .game-thumbnail.adventure {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .game-thumbnail.sports {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+        }
+
+        .game-info {
+            padding: 1.5rem;
+        }
+
+        .game-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .game-category {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 107, 53, 0.2);
+            color: var(--primary);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+        }
+
+        .game-description {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .play-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .play-btn:hover {
+            background: linear-gradient(135deg, var(--hover), var(--accent));
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Game Modal */
+        .game-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .game-modal.active {
+            display: flex;
+        }
+
+        .game-container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-header h2 {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .close-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--hover);
+            transform: rotate(90deg);
+        }
+
+        .game-canvas-container {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 1rem;
+            min-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            border-radius: 10px;
+            max-width: 100%;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 10;
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 2px solid var(--primary);
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .game-container {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            .game-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Particles -->
+    <div class="bg-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo" onclick="location.reload()">🎮 GameHub</div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Hledej své oblíbené hry...">
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <button class="category-btn active" data-category="all">🌟 Všechny hry</button>
+            <button class="category-btn" data-category="racing">🏎️ Závody</button>
+            <button class="category-btn" data-category="math">🧮 Matematika</button>
+            <button class="category-btn" data-category="action">⚔️ Akční</button>
+            <button class="category-btn" data-category="puzzle">🧩 Hlavolamy</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1>Hraj nejlepší online hry zdarma!</h1>
+            <p>Tisíce her, nekonečná zábava. Žádné stahování, jen klikni a hraj!</p>
+        </section>
+
+        <!-- Games Grid -->
+        <section class="games-section">
+            <h2 class="section-title">🔥 Populární hry</h2>
+            <div class="games-grid" id="gamesGrid">
+                <!-- Racing Games -->
+                <div class="game-card" data-category="racing" data-game="racing1">
+                    <div class="game-thumbnail racing">🏁</div>
+                    <div class="game-info">
+                        <h3 class="game-title">Turbo Racing</h3>
+                        <span class="game-category">Závody</span>
+                        <p class="game-description">Závod na životní úroveň! Ovládej auto šipkami a vyhni se překážkám.</p>
+                        <button class="play-btn">Hrát nyní</button>
+                    </div>
+                </div>
+
+                <div class="game-card" data-category="racing" data-game="racing2">
+                    <div class="game-thumbnail racing">🏎️</div>
+                    <div class="game-info">
+                        <h3 class="game-title">Speed Demon</h3>
+                        <span class="game-category">Závody</span>
+                        <p class="game-description">Rychlost je všechno! Sbírej body a stav se mistrem.</p>
+                        <button class="play-btn">Hrát nyní</button>
+                    </div>
+                </div>
+
+                <!-- Math Games -->
+                <div class="game-card" data-category="math" data-game="math1">
+                    <div class="game-thumbnail math">🧮</div>
+                    <div class="game-info">
+                        <h3 class="game-title">Math Master</h3>
+                        <span class="game-category">Matematika</span>
+                        <p class="game-description">Trénuj svůj mozek s rychlými matematickými výzvami!</p>
+                        <button class="play-btn">Hrát nyní</button>
+                    </div>
+                </div>
+
+                <div class="game-card" data-category="math" data-game="math2">
+                    <div class="game-thumbnail math">➕</div>
+                    <div class="game-info">
+                        <h3 class="game-title">Number Ninja</h3>
+                        <span class="game-category">Matematika</span>
+                        <p class="game-description">Řeš příklady než vyprší čas! Buď rychlejší než soupeři.</p>
+                        <button class="play-btn">Hrát nyní</button>
+                    </div>
+                </div>
+
+                <!-- Action Games -->
+                <div class="game-card" data-category="action" data-game="action1">
+                    <div class="game-thumbnail action">⚔️</div>
+                    <div class="game-info">
+                        <h3 class="game-title">Epic Shooter</h3>
+                        <span class="game-category">Akční</span>
+                        <p class="game-description">Klikej a střícej! Zničč všechny nepřátele.</p>
+                        <button class="play-btn">Hrát nyní</button>
+                    </div>
+                </div>
+
+                <!-- Puzzle Games -->
+                <div class="game-card" data-category="puzzle" data-game="puzzle1">
+                    <div class="game-thumbnail puzzle">🧩</div>
+                    <div class="game-info">
+                        <h3 class="game-title">Memory Match</h3>
+                        <span class="game-category">Hlavolamy</span>
+                        <p class="game-description">Najdi všechny páry! Trénuj svou paměť.</p>
+                        <button class="play-btn">Hrát nyní</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Game Modal -->
+    <div class="game-modal" id="gameModal">
+        <div class="game-container">
+            <div class="game-header">
+                <h2 id="modalGameTitle">Hra</h2>
+                <button class="close-btn" onclick="closeGame()">&times;</button>
+            </div>
+            <div class="game-canvas-container">
+                <canvas id="gameCanvas" width="800" height="500"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 GameHub. Všechny hry jsou zdarma! Hraj, bav se a sdílej s přáteli! 🎮</p>
+    </footer>
+
+    <script src="games.js"></script>
+</body>
+</html>

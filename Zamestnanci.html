@@ -274,148 +274,7 @@
             }
         }
     </style>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>👨‍🍳 Panel zaměstnanců</h1>
-            <p>Správa objednávek FoodHub</p>
-            
-            <!-- Přepínač Otevřeno/Zavřeno -->
-            <div style="margin-top: 20px; text-align: center;">
-                <div style="display: inline-flex; align-items: center; gap: 20px; background: rgba(0, 0, 0, 0.5); padding: 15px 30px; border-radius: 15px; border: 2px solid #00ff00;">
-                    <span style="color: #00ffff; font-size: 1.2em; font-weight: 600;">Stav stánku:</span>
-                    <button 
-                        id="statusToggle"
-                        onclick="toggleShopStatus()"
-                        style="
-                            padding: 12px 40px;
-                            font-size: 1.2em;
-                            background: linear-gradient(90deg, #00ff00, #00ffff);
-                            color: white;
-                            border: none;
-                            border-radius: 10px;
-                            cursor: pointer;
-                            font-weight: 700;
-                            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-                            transition: all 0.3s;
-                        "
-                    >
-                        🟢 OTEVŘENO
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Pole pro zadání kódu -->
-            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; align-items: center;">
-                <input 
-                    type="text" 
-                    id="orderCodeInput" 
-                    placeholder="Zadejte 6-místný kód objednávky" 
-                    maxlength="6"
-                    style="
-                        padding: 15px 25px;
-                        font-size: 1.2em;
-                        border: 2px solid #00ff00;
-                        border-radius: 10px;
-                        background: rgba(0, 0, 0, 0.5);
-                        color: #00ff00;
-                        text-align: center;
-                        font-weight: bold;
-                        letter-spacing: 3px;
-                        width: 250px;
-                        box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-                    "
-                >
-                <button 
-                    onclick="unlockOrder()"
-                    style="
-                        padding: 15px 30px;
-                        font-size: 1.1em;
-                        background: linear-gradient(90deg, #00ff00, #00ffff);
-                        color: white;
-                        border: none;
-                        border-radius: 10px;
-                        cursor: pointer;
-                        font-weight: 600;
-                        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-                    "
-                >
-                    🔓 Odemknout objednávku
-                </button>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="orders-section">
-                <h2>📋 Objednávky</h2>
-                <div id="ordersList">
-                    <!-- Objednávky se načtou zde -->
-                </div>
-            </div>
-
-            <div class="calculator-section">
-                <h2>🧮 Kalkulačka</h2>
-                <div class="active-order-info" id="activeOrderInfo" style="display: none;">
-                    Vybraná objednávka: <span id="selectedOrderId"></span>
-                </div>
-                <div class="calc-display" id="calcDisplay">0</div>
-                <div class="calc-buttons">
-                    <button class="calc-btn" onclick="appendNumber('7')">7</button>
-                    <button class="calc-btn" onclick="appendNumber('8')">8</button>
-                    <button class="calc-btn" onclick="appendNumber('9')">9</button>
-                    <button class="calc-btn operator" onclick="appendOperator('÷')">÷</button>
-                    
-                    <button class="calc-btn" onclick="appendNumber('4')">4</button>
-                    <button class="calc-btn" onclick="appendNumber('5')">5</button>
-                    <button class="calc-btn" onclick="appendNumber('6')">6</button>
-                    <button class="calc-btn operator" onclick="appendOperator('×')">×</button>
-                    
-                    <button class="calc-btn" onclick="appendNumber('1')">1</button>
-                    <button class="calc-btn" onclick="appendNumber('2')">2</button>
-                    <button class="calc-btn" onclick="appendNumber('3')">3</button>
-                    <button class="calc-btn operator" onclick="appendOperator('-')">-</button>
-                    
-                    <button class="calc-btn" onclick="clearCalc()">C</button>
-                    <button class="calc-btn" onclick="appendNumber('0')">0</button>
-                    <button class="calc-btn" onclick="appendNumber('.')">.</button>
-                    <button class="calc-btn operator" onclick="appendOperator('+')">+</button>
-                    
-                    <button class="calc-btn enter" onclick="completeOrder()">ENTER - Dokončit objednávku</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Inicializovat Firebase až po načtení stránky
-        let database;
-        
-        // Počkat na načtení Firebase
-        window.addEventListener('load', function() {
-            // Firebase konfigurace
-            const firebaseConfig = {
-                apiKey: "AIzaSyCBJRGUPvDCqTivyqjktsZlizJ-_0Sknpw",
-                authDomain: "foodhub-60f18.firebaseapp.com",
-                databaseURL: "https://foodhub-60f18-default-rtdb.europe-west1.firebasedatabase.app",
-                projectId: "foodhub-60f18",
-                storageBucket: "foodhub-60f18.firebasestorage.app",
-                messagingSenderId: "606535573991",
-                appId: "1:606535573991:web:4b4d136b046b0c65a15d42",
-                measurementId: "G-NWP8FBJCCE"
-            };
-            
-            // Inicializovat Firebase
-            firebase.initializeApp(firebaseConfig);
-            database = firebase.database();
-            
-            // Po inicializaci Firebase spustit aplikaci
-            initApp();
-        });
 <body>
     <div class="container">
         <div class="header">
@@ -534,45 +393,40 @@
         let previousValue = null;
         let selectedOrderId = null;
 
-        // Inicializovat aplikaci po načtení Firebase
-        function initApp() {
+        // Načíst stav stánku při načtení stránky
+        window.addEventListener('DOMContentLoaded', function() {
             updateStatusButton();
-            loadOrders();
-        }
+        });
 
         // Přepnout stav stánku (Otevřeno/Zavřeno)
         function toggleShopStatus() {
-            database.ref('shop_status').once('value').then((snapshot) => {
-                const currentStatus = snapshot.val() || 'open';
-                const newStatus = currentStatus === 'open' ? 'closed' : 'open';
-                
-                database.ref('shop_status').set(newStatus);
-                updateStatusButton();
-                
-                if (newStatus === 'closed') {
-                    alert('🔴 Stánek byl ZAVŘEN\n\nZákazníci nyní nemohou objednávat.');
-                } else {
-                    alert('🟢 Stánek byl OTEVŘEN\n\nZákazníci mohou opět objednávat!');
-                }
-            });
+            const currentStatus = localStorage.getItem('foodhub_shop_status') || 'open';
+            const newStatus = currentStatus === 'open' ? 'closed' : 'open';
+            
+            localStorage.setItem('foodhub_shop_status', newStatus);
+            updateStatusButton();
+            
+            if (newStatus === 'closed') {
+                alert('🔴 Stánek byl ZAVŘEN\n\nZákazníci nyní nemohou objednávat.');
+            } else {
+                alert('🟢 Stánek byl OTEVŘEN\n\nZákazníci mohou opět objednávat!');
+            }
         }
 
         // Aktualizovat vzhled tlačítka
         function updateStatusButton() {
-            database.ref('shop_status').once('value').then((snapshot) => {
-                const status = snapshot.val() || 'open';
-                const button = document.getElementById('statusToggle');
-                
-                if (status === 'open') {
-                    button.textContent = '🟢 OTEVŘENO';
-                    button.style.background = 'linear-gradient(90deg, #00ff00, #00ffff)';
-                    button.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.5)';
-                } else {
-                    button.textContent = '🔴 ZAVŘENO';
-                    button.style.background = 'linear-gradient(90deg, #ff0000, #ff6b6b)';
-                    button.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.5)';
-                }
-            });
+            const status = localStorage.getItem('foodhub_shop_status') || 'open';
+            const button = document.getElementById('statusToggle');
+            
+            if (status === 'open') {
+                button.textContent = '🟢 OTEVŘENO';
+                button.style.background = 'linear-gradient(90deg, #00ff00, #00ffff)';
+                button.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.5)';
+            } else {
+                button.textContent = '🔴 ZAVŘENO';
+                button.style.background = 'linear-gradient(90deg, #ff0000, #ff6b6b)';
+                button.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.5)';
+            }
         }
 
         // Odemknout objednávku pomocí kódu
@@ -584,90 +438,74 @@
                 return;
             }
             
-            // Hledat objednávku v Firebase
-            database.ref('orders').once('value').then((snapshot) => {
-                const orders = snapshot.val() || {};
-                let foundOrder = null;
-                let foundOrderId = null;
-                
-                // Najít objednávku s daným kódem
-                for (let orderId in orders) {
-                    if (orders[orderId].code === code && !orders[orderId].visible) {
-                        foundOrder = orders[orderId];
-                        foundOrderId = orderId;
-                        break;
-                    }
-                }
-                
-                if (!foundOrder) {
-                    alert('❌ Neplatný kód nebo objednávka již byla odemčena!');
-                    return;
-                }
-                
-                // Odemknout objednávku
-                database.ref('orders/' + foundOrderId).update({
-                    visible: true
-                });
-                
-                alert(`✅ Objednávka byla odemčena!\n\nZákazník: ${foundOrder.customerName}\nCelkem: ${foundOrder.total} Kč`);
-                
-                document.getElementById('orderCodeInput').value = '';
-            });
+            const orders = JSON.parse(localStorage.getItem('foodhub_orders')) || [];
+            const orderIndex = orders.findIndex(o => o.code === code && !o.visible);
+            
+            if (orderIndex === -1) {
+                alert('❌ Neplatný kód nebo objednávka již byla odemčena!');
+                return;
+            }
+            
+            // Odemknout objednávku
+            orders[orderIndex].visible = true;
+            localStorage.setItem('foodhub_orders', JSON.stringify(orders));
+            
+            alert(`✅ Objednávka #${orders[orderIndex].id} byla odemčena!\n\nZákazník: ${orders[orderIndex].customerName}\nCelkem: ${orders[orderIndex].total} Kč`);
+            
+            document.getElementById('orderCodeInput').value = '';
+            loadOrders();
         }
 
-        // Načíst objednávky z Firebase s real-time aktualizací
+        // Načíst objednávky
         function loadOrders() {
-            database.ref('orders').on('value', (snapshot) => {
-                const ordersData = snapshot.val() || {};
-                const orders = Object.values(ordersData);
-                const ordersList = document.getElementById('ordersList');
+            const orders = JSON.parse(localStorage.getItem('foodhub_orders')) || [];
+            const ordersList = document.getElementById('ordersList');
 
-                // Zobrazit pouze viditelné objednávky
-                const visibleOrders = orders.filter(order => order.visible === true);
+            // Zobrazit pouze viditelné objednávky
+            const visibleOrders = orders.filter(order => order.visible === true);
 
-                if (visibleOrders.length === 0) {
-                    ordersList.innerHTML = '<div class="no-orders">Zatím žádné odemčené objednávky<br><br>💡 Zákazník vám řekne 6-místný kód, zadejte ho výše</div>';
-                    return;
-                }
+            if (visibleOrders.length === 0) {
+                ordersList.innerHTML = '<div class="no-orders">Zatím žádné odemčené objednávky<br><br>💡 Zákazník vám řekne 6-místný kód, zadejte ho výše</div>';
+                return;
+            }
 
-                ordersList.innerHTML = '';
+            ordersList.innerHTML = '';
+            
+            // Zobrazit nejprve čekající, pak dokončené
+            const sortedOrders = visibleOrders.sort((a, b) => {
+                if (a.status === 'čeká' && b.status !== 'čeká') return -1;
+                if (a.status !== 'čeká' && b.status === 'čeká') return 1;
+                return b.id - a.id;
+            });
+
+            sortedOrders.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = `order-card ${order.status === 'dokončeno' ? 'completed' : ''}`;
+                orderCard.onclick = () => selectOrder(order.id);
                 
-                // Zobrazit nejprve čekající, pak dokončené
-                const sortedOrders = visibleOrders.sort((a, b) => {
-                    if (a.status === 'čeká' && b.status !== 'čeká') return -1;
-                    if (a.status !== 'čeká' && b.status === 'čeká') return 1;
-                    return b.id - a.id;
+                let itemsHTML = '';
+                order.items.forEach(item => {
+                    itemsHTML += `<div class="order-item">${item.name} × ${item.quantity} = ${item.price * item.quantity} Kč</div>`;
                 });
 
-                sortedOrders.forEach(order => {
-                    const orderCard = document.createElement('div');
-                    orderCard.className = `order-card ${order.status === 'dokončeno' ? 'completed' : ''}`;
-                    orderCard.onclick = () => selectOrder(order.id);
-                    
-                    let itemsHTML = '';
-                    order.items.forEach(item => {
-                        itemsHTML += `<div class="order-item">${item.name} × ${item.quantity} = ${item.price * item.quantity} Kč</div>`;
-                    });
-
-                    orderCard.innerHTML = `
-                        <div class="order-header">
-                            <div class="order-id">🔑 KÓD: ${order.code}</div>
-                            <div class="order-status ${order.status === 'čeká' ? 'pending' : 'completed'}">
-                                ${order.status === 'čeká' ? 'Čeká' : 'Dokončeno'}
-                            </div>
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <div class="order-id">🔑 KÓD: ${order.code}</div>
+                        <div class="order-status ${order.status === 'čeká' ? 'pending' : 'completed'}">
+                            ${order.status === 'čeká' ? 'Čeká' : 'Dokončeno'}
                         </div>
-                        <div class="order-info">
-                            👤 Zákazník: ${order.customerName}<br>
-                            🕐 Čas: ${order.timestamp}
-                        </div>
-                        <div class="order-items">
-                            ${itemsHTML}
-                        </div>
-                        <div class="order-total">Celkem: ${order.total} Kč</div>
-                    `;
-                    
-                    ordersList.appendChild(orderCard);
-                });
+                    </div>
+                    <div class="order-info">
+                        👤 Zákazník: ${order.customerName}<br>
+                        🕐 Čas: ${order.timestamp}
+                    </div>
+                    <div class="order-items">
+                        ${itemsHTML}
+                    </div>
+                    <div class="order-total">Celkem: ${order.total} Kč</div>
+                `;
+                
+                ordersList.appendChild(orderCard);
             });
         }
 
@@ -759,21 +597,22 @@
                 return;
             }
 
-            database.ref('orders/' + selectedOrderId).update({
-                status: 'dokončeno'
-            }).then(() => {
-                alert(`✅ Objednávka byla dokončena!`);
+            const orders = JSON.parse(localStorage.getItem('foodhub_orders')) || [];
+            const orderIndex = orders.findIndex(o => o.id === selectedOrderId);
+
+            if (orderIndex !== -1) {
+                orders[orderIndex].status = 'dokončeno';
+                localStorage.setItem('foodhub_orders', JSON.stringify(orders));
+                
+                alert(`✅ Objednávka #${selectedOrderId} byla dokončena!`);
                 
                 selectedOrderId = null;
                 document.getElementById('activeOrderInfo').style.display = 'none';
                 clearCalc();
-            });
+                loadOrders();
+            }
         }
 
-        // Automatické obnovování už není potřeba - Firebase aktualizuje real-time
-        // Načíst objednávky při načtení stránky
-        loadOrders();
-        
         // Klávesnice podpora
         document.addEventListener('keydown', function(e) {
             if (e.key >= '0' && e.key <= '9') {
@@ -796,6 +635,9 @@
                 clearCalc();
             }
         });
+
+        // Automatické obnovování každých 5 sekund
+        setInterval(loadOrders, 5000);
 
         // Načíst objednávky při načtení stránky
         loadOrders();

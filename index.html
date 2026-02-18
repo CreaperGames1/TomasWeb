@@ -535,143 +535,7 @@
             }
         }
     </style>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 </head>
-<body>
-    <!-- Overlay pro zavřeno -->
-    <div class="closed-overlay" id="closedOverlay">
-        <div class="closed-message">
-            <h1>🔴 ZAVŘENO</h1>
-            <p>Omlouváme se, momentálně nemůžeme přijímat objednávky.</p>
-            <p style="font-size: 1.2em; margin-top: 20px;">Zkuste to prosím později!</p>
-        </div>
-    </div>
-
-    <div class="container">
-        <!-- Authentication Section -->
-        <div class="auth-section" id="authSection">
-            <a href="https://www.youtube.com/@DevTomasekPlays" target="_blank" class="youtube-link" title="Navštivte DevTomasekPlays na YouTube">▶️</a>
-            
-            <h1>🍭 FoodHub</h1>
-            <p>Lahodné dobroty dodané až k vám domů</p>
-
-            <div class="form-tabs">
-                <button class="tab-btn active" onclick="switchTab('login')">Přihlášení</button>
-                <button class="tab-btn" onclick="switchTab('register')">Registrace</button>
-            </div>
-
-            <!-- Login Form -->
-            <div class="form-container">
-                <form class="form active" id="loginForm" onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label for="loginEmail">Email</label>
-                        <input type="email" id="loginEmail" required placeholder="Zadejte váš email">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Heslo</label>
-                        <input type="password" id="loginPassword" required placeholder="Zadejte vaše heslo">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginCode">Ověřovací kód (z emailu)</label>
-                        <input type="text" id="loginCode" required placeholder="Zadejte 6-místný kód" maxlength="6">
-                    </div>
-                    <div class="info-message" id="loginCodeInfo" style="display: none;">
-                        📧 Váš ověřovací kód: <strong id="displayLoginCode"></strong>
-                    </div>
-                    <button type="submit" class="submit-btn">Přihlásit se</button>
-                </form>
-
-                <!-- Register Form -->
-                <form class="form" id="registerForm" onsubmit="handleRegister(event)">
-                    <div class="form-group">
-                        <label for="registerName">Celé jméno</label>
-                        <input type="text" id="registerName" required placeholder="Zadejte vaše jméno">
-                    </div>
-                    <div class="form-group">
-                        <label for="registerEmail">Email</label>
-                        <input type="email" id="registerEmail" required placeholder="Zadejte váš email">
-                    </div>
-                    <div class="form-group">
-                        <label for="registerPassword">Heslo</label>
-                        <input type="password" id="registerPassword" required placeholder="Vytvořte heslo (min. 6 znaků)">
-                    </div>
-                    <div class="form-group">
-                        <label for="registerConfirmPassword">Potvrdit heslo</label>
-                        <input type="password" id="registerConfirmPassword" required placeholder="Potvrďte vaše heslo">
-                    </div>
-                    <button type="submit" class="submit-btn">Registrovat se</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Shopping Section -->
-        <div class="shopping-section" id="shoppingSection">
-            <a href="https://www.youtube.com/@DevTomasekPlays" target="_blank" class="youtube-link" title="Navštivte DevTomasekPlays na YouTube">▶️</a>
-            
-            <div class="shopping-header">
-                <h2>Vítejte, <span id="userName">Uživatel</span>!</h2>
-                <div class="user-info">
-                    <div class="cart-icon" onclick="toggleCart()">
-                        🛒
-                        <span class="cart-count" id="cartCount">0</span>
-                    </div>
-                    <button class="logout-btn" onclick="handleLogout()">Odhlásit se</button>
-                </div>
-            </div>
-
-            <div class="products-grid" id="productsGrid">
-                <!-- Products will be loaded here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Cart Modal -->
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Váš košík</h2>
-                <span class="close-cart" onclick="toggleCart()">✕</span>
-            </div>
-            <div id="cartItems">
-                <!-- Cart items will be loaded here -->
-            </div>
-            <div class="cart-total">
-                Celkem: <span id="cartTotal">0 - Zaplatíš u stánku</span>
-            </div>
-            <button class="checkout-btn" onclick="instantCheckout()">Objednat</button>
-            
-            <!-- Payment Form - REMOVED -->
-        </div>
-    </div>
-
-    <script>
-        // Inicializovat Firebase až po načtení stránky
-        let database;
-        
-        // Počkat na načtení Firebase
-        window.addEventListener('load', function() {
-            // Firebase konfigurace
-            const firebaseConfig = {
-                apiKey: "AIzaSyCBJRGUPvDCqTivyqjktsZlizJ-_0Sknpw",
-                authDomain: "foodhub-60f18.firebaseapp.com",
-                databaseURL: "https://foodhub-60f18-default-rtdb.europe-west1.firebasedatabase.app",
-                projectId: "foodhub-60f18",
-                storageBucket: "foodhub-60f18.firebasestorage.app",
-                messagingSenderId: "606535573991",
-                appId: "1:606535573991:web:4b4d136b046b0c65a15d42",
-                measurementId: "G-NWP8FBJCCE"
-            };
-            
-            // Inicializovat Firebase
-            firebase.initializeApp(firebaseConfig);
-            database = firebase.database();
-            
-            // Po inicializaci Firebase spustit aplikaci
-            initApp();
-        });
 <body>
     <!-- Overlay pro zavřeno -->
     <div class="closed-overlay" id="closedOverlay">
@@ -791,54 +655,35 @@
         let cart = [];
         let currentUser = null;
         
-        // Načíst uživatele z Firebase
-        let users = {};
-        database.ref('users').once('value').then((snapshot) => {
-            users = snapshot.val() || {};
-        });
+        // Načíst uživatele z localStorage
+        let users = JSON.parse(localStorage.getItem('foodhub_users')) || {};
         
-        // Načíst uložené přihlášení z localStorage (pouze pro tento device)
+        // Načíst uložené přihlášení
         let rememberedLogin = JSON.parse(localStorage.getItem('foodhub_login')) || null;
 
-        // Inicializovat aplikaci po načtení Firebase
-        function initApp() {
+        // Zkontrolovat, zda je uživatel již přihlášen
+        window.addEventListener('DOMContentLoaded', function() {
             checkShopStatus();
             
-            // Načíst uživatele z Firebase
-            database.ref('users').once('value').then((snapshot) => {
-                users = snapshot.val() || {};
-                
-                if (rememberedLogin && users[rememberedLogin.email]) {
-                    currentUser = users[rememberedLogin.email].name;
-                    showShopping();
-                }
-            });
+            if (rememberedLogin && users[rememberedLogin.email]) {
+                currentUser = users[rememberedLogin.email].name;
+                showShopping();
+            }
             
-            // Poslouchat změny stavu stánku v reálném čase
-            database.ref('shop_status').on('value', (snapshot) => {
-                const status = snapshot.val() || 'open';
-                const overlay = document.getElementById('closedOverlay');
-                
-                if (status === 'closed') {
-                    overlay.classList.add('active');
-                } else {
-                    overlay.classList.remove('active');
-                }
-            });
-        }
+            // Kontrolovat stav každé 3 sekundy
+            setInterval(checkShopStatus, 3000);
+        });
 
         // Zkontrolovat, zda je stánek otevřený
         function checkShopStatus() {
-            database.ref('shop_status').once('value').then((snapshot) => {
-                const status = snapshot.val() || 'open';
-                const overlay = document.getElementById('closedOverlay');
-                
-                if (status === 'closed') {
-                    overlay.classList.add('active');
-                } else {
-                    overlay.classList.remove('active');
-                }
-            });
+            const status = localStorage.getItem('foodhub_shop_status') || 'open';
+            const overlay = document.getElementById('closedOverlay');
+            
+            if (status === 'closed') {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
         }
 
         // Vygenerovat 6-místný kód
@@ -879,18 +724,13 @@
                 return;
             }
             
-            // Vygenerovat kód při prvním pokusu
+            // Vygenerovat kód při prvním pokusu (když je pole s kódem aktivní)
             if (!users[email].loginCode) {
-                const newCode = generateCode();
-                users[email].loginCode = newCode;
+                users[email].loginCode = generateCode();
+                localStorage.setItem('foodhub_users', JSON.stringify(users));
                 
-                // Uložit do Firebase
-                database.ref('users/' + email.replace(/\./g, '_')).update({
-                    loginCode: newCode
-                });
-                
-                // Zobrazit kód
-                document.getElementById('displayLoginCode').textContent = newCode;
+                // Zobrazit kód (simulace emailu)
+                document.getElementById('displayLoginCode').textContent = users[email].loginCode;
                 document.getElementById('loginCodeInfo').style.display = 'block';
                 alert('📧 Ověřovací kód byl odeslán na váš email!\n(Pro demo účely je kód zobrazen níže)');
                 return;
@@ -905,14 +745,12 @@
             // Úspěšné přihlášení
             currentUser = users[email].name;
             
-            // Zapamatovat si přihlášení (jen lokálně)
+            // Zapamatovat si přihlášení
             localStorage.setItem('foodhub_login', JSON.stringify({ email: email }));
             
-            // Vymazat přihlašovací kód
+            // Vymazat přihlašovací kód po úspěšném přihlášení
             delete users[email].loginCode;
-            database.ref('users/' + email.replace(/\./g, '_')).update({
-                loginCode: null
-            });
+            localStorage.setItem('foodhub_users', JSON.stringify(users));
             
             showShopping();
         }
@@ -924,16 +762,11 @@
             
             if (email && password && users[email] && users[email].password === password) {
                 if (!users[email].loginCode) {
-                    const newCode = generateCode();
-                    users[email].loginCode = newCode;
-                    
-                    // Uložit do Firebase
-                    database.ref('users/' + email.replace(/\./g, '_')).update({
-                        loginCode: newCode
-                    });
+                    users[email].loginCode = generateCode();
+                    localStorage.setItem('foodhub_users', JSON.stringify(users));
                     
                     // Zobrazit kód
-                    document.getElementById('displayLoginCode').textContent = newCode;
+                    document.getElementById('displayLoginCode').textContent = users[email].loginCode;
                     document.getElementById('loginCodeInfo').style.display = 'block';
                 }
             }
@@ -971,11 +804,8 @@
                 password: password
             };
             
-            // Uložit do Firebase
-            database.ref('users/' + email.replace(/\./g, '_')).set({
-                name: name,
-                password: password
-            });
+            // Uložit do localStorage
+            localStorage.setItem('foodhub_users', JSON.stringify(users));
             
             alert('✅ Registrace úspěšná! Nyní se můžete přihlásit.');
             
@@ -1116,8 +946,10 @@
                 visible: false  // Objednávka je skrytá dokud zaměstnanec nezadá kód
             };
             
-            // Uložit do Firebase
-            database.ref('orders/' + order.id).set(order);
+            // Uložit do localStorage pro zaměstnance
+            let orders = JSON.parse(localStorage.getItem('foodhub_orders')) || [];
+            orders.push(order);
+            localStorage.setItem('foodhub_orders', JSON.stringify(orders));
             
             alert(`🎉 Objednávka přijata!\n\n📱 VÁŠ KÓD: ${orderCode}\n\n⚠️ DŮLEŽITÉ: Řekněte tento kód zaměstnanci u stánku!\n\nCelkem: ${totalAmount} Kč\n💰 Zaplatíš u stánku při vyzvednutí!`);
             
