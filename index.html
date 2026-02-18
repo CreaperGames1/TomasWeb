@@ -472,6 +472,49 @@
             text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
 
+        /* Zavřeno overlay */
+        .closed-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .closed-overlay.active {
+            display: flex;
+        }
+
+        .closed-message {
+            text-align: center;
+            padding: 60px;
+            background: rgba(255, 0, 0, 0.2);
+            border: 3px solid #ff0000;
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.8);
+        }
+
+        .closed-message h1 {
+            font-size: 5em;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff0000, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .closed-message p {
+            font-size: 1.8em;
+            color: #ff6b6b;
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+        }
+
         @media (max-width: 768px) {
             .auth-section {
                 padding: 40px 20px;
@@ -494,6 +537,15 @@
     </style>
 </head>
 <body>
+    <!-- Overlay pro zavřeno -->
+    <div class="closed-overlay" id="closedOverlay">
+        <div class="closed-message">
+            <h1>🔴 ZAVŘENO</h1>
+            <p>Omlouváme se, momentálně nemůžeme přijímat objednávky.</p>
+            <p style="font-size: 1.2em; margin-top: 20px;">Zkuste to prosím později!</p>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Authentication Section -->
         <div class="auth-section" id="authSection">
@@ -583,7 +635,7 @@
                 <!-- Cart items will be loaded here -->
             </div>
             <div class="cart-total">
-                Celkem: <span id="cartTotal">0 - Zaplatíš u stánku</span>
+                Celkem: <span id="cartTotal">0 - Zaplatíš kartou</span>
             </div>
             <button class="checkout-btn" onclick="instantCheckout()">Objednat</button>
             
@@ -594,7 +646,7 @@
     <script>
         // Produkty jídel
         const products = [
-            { id: 1, name: 'Cukrová vata', price: 35, emoji: '🍭', available: true },
+            { id: 1, name: 'Cukrová vata', price: 15, emoji: '🍭', available: true, stripeLink: 'https://buy.stripe.com/test_9B628t1Am0kr7d2cwl9k400' },
             { id: 2, name: 'Hranolky', price: 95, emoji: '🍟', available: false },
             { id: 3, name: 'Zmrzlina', price: 145, emoji: '🍦', available: false },
             { id: 4, name: 'Palačinky', price: 170, emoji: '🥞', available: false }
@@ -611,11 +663,28 @@
 
         // Zkontrolovat, zda je uživatel již přihlášen
         window.addEventListener('DOMContentLoaded', function() {
+            checkShopStatus();
+            
             if (rememberedLogin && users[rememberedLogin.email]) {
                 currentUser = users[rememberedLogin.email].name;
                 showShopping();
             }
+            
+            // Kontrolovat stav každé 3 sekundy
+            setInterval(checkShopStatus, 3000);
         });
+
+        // Zkontrolovat, zda je stánek otevřený
+        function checkShopStatus() {
+            const status = localStorage.getItem('foodhub_shop_status') || 'open';
+            const overlay = document.getElementById('closedOverlay');
+            
+            if (status === 'closed') {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }
 
         // Vygenerovat 6-místný kód
         function generateCode() {
@@ -766,14 +835,14 @@
                     card.innerHTML = `
                         <div class="product-image">${product.emoji}</div>
                         <div class="product-name">${product.name}</div>
-                        <div class="product-price">${product.price} Kč - Zaplatíš u stánku</div>
+                        <div class="product-price">${product.price} Kč - Zaplatíš kartou</div>
                         <button class="add-to-cart" onclick="addToCart(${product.id})">Přidat do košíku</button>
                     `;
                 } else {
                     card.innerHTML = `
                         <div class="product-image" style="opacity: 0.5">${product.emoji}</div>
                         <div class="product-name">${product.name}</div>
-                        <div class="product-price">${product.price} Kč - Zaplatíš u stánku</div>
+                        <div class="product-price">${product.price} Kč - Zaplatíš kartou</div>
                         <button class="add-to-cart" style="background: #ccc; cursor: not-allowed;" disabled>Již brzy</button>
                     `;
                 }
@@ -822,7 +891,7 @@
             
             if (cart.length === 0) {
                 cartItems.innerHTML = '<div class="empty-cart">Váš košík je prázdný</div>';
-                document.getElementById('cartTotal').textContent = '0 - Zaplatíš u stánku';
+                document.getElementById('cartTotal').textContent = '0 - Zaplatíš kartou';
                 return;
             }
             
@@ -845,10 +914,10 @@
                 cartItems.appendChild(cartItem);
             });
             
-            document.getElementById('cartTotal').textContent = total + ' Kč - Zaplatíš u stánku';
+            document.getElementById('cartTotal').textContent = total + ' Kč - Zaplatíš kartou';
         }
 
-        // Okamžité objednání bez vyplňování formuláře
+        // Okamžité objednání s platbou přes Stripe
         function instantCheckout() {
             if (cart.length === 0) {
                 alert('Váš košík je prázdný!');
@@ -858,9 +927,13 @@
             const totalText = document.getElementById('cartTotal').textContent;
             const totalAmount = totalText.split(' Kč')[0];
             
+            // Vygenerovat 6-místný kód objednávky
+            const orderCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
             // Uložit objednávku pro zaměstnance
             const order = {
                 id: Date.now(),
+                code: orderCode,
                 customerName: currentUser,
                 items: cart.map(item => ({
                     name: item.name,
@@ -869,7 +942,8 @@
                 })),
                 total: totalAmount,
                 timestamp: new Date().toLocaleString('cs-CZ'),
-                status: 'čeká'
+                status: 'čeká',
+                visible: false  // Objednávka je skrytá dokud zaměstnanec nezadá kód
             };
             
             // Uložit do localStorage pro zaměstnance
@@ -877,7 +951,7 @@
             orders.push(order);
             localStorage.setItem('foodhub_orders', JSON.stringify(orders));
             
-            alert(`🎉 Objednávka přijata!\n\nDěkujeme, ${currentUser}!\nCelkem: ${totalAmount} Kč\n\n💰 Zaplatíš u stánku při vyzvednutí!`);
+            alert(`🎉 Objednávka přijata!\n\n📱 VÁŠ KÓD: ${orderCode}\n\n⚠️ DŮLEŽITÉ: Řekněte tento kód zaměstnanci u stánku!\n\nCelkem: ${totalAmount} Kč\n💰 Zaplatíš u stánku při vyzvednutí!`);
             
             cart = [];
             updateCartCount();
