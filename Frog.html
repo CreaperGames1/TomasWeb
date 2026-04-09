@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encyklopedie žab</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-dark: #1a3a2a;
+    --green-mid: #2d5a3d;
+    --green-light: #4a8c5c;
+    --green-pale: #a8d5b5;
+    --green-faint: #e8f5ec;
+    --cream: #faf7f2;
+    --brown: #6b4c2a;
+    --text: #1a2e1f;
+    --text-muted: #5a7060;
+    --accent: #c8e6d0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--green-dark);
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, #2d5a3d55 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, #1a4a2a44 0%, transparent 55%);
+  }
+  .header-inner { position: relative; z-index: 1; }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    color: #e8f5ec;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  header p {
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    color: var(--green-pale);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  /* LANG TOGGLE */
+  .lang-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 1.5rem;
+  }
+  .lang-btn {
+    padding: 8px 20px;
+    border: 1.5px solid #4a8c5c;
+    background: transparent;
+    color: var(--green-pale);
+    border-radius: 40px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .lang-btn.active, .lang-btn:hover {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    color: #fff;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--green-mid);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: #e8f5ec; font-weight: 700; }
+  .stat-label { font-size: 11px; color: var(--green-pale); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+
+  /* GRID */
+  .container { max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--green-dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--green-pale);
+  }
+
+  .frog-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+
+  /* CARD */
+  .frog-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #d8ead0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .frog-card:hover { box-shadow: 0 8px 32px rgba(29,80,48,0.12); transform: translateY(-2px); }
+
+  .card-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    gap: 12px;
+  }
+  .frog-emoji { font-size: 56px; line-height: 1; }
+  .frog-name-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .frog-sci {
+    font-size: 11px;
+    font-style: italic;
+    color: #888;
+    text-align: center;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+  .tag {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+  }
+
+  .card-body { padding: 1.5rem 1.75rem 1.5rem 0; border-left: 1px solid #e8f0ea; }
+  .frog-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .info-block {}
+  .info-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-light);
+    margin-bottom: 6px;
+  }
+  .ability-list { list-style: none; }
+  .ability-list li {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding: 3px 0 3px 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .ability-list li::before {
+    content: '↗';
+    position: absolute;
+    left: 0;
+    color: var(--green-light);
+    font-size: 10px;
+    top: 4px;
+  }
+
+  .meta-item { margin-bottom: 8px; }
+  .meta-val { font-size: 13px; color: var(--text); line-height: 1.4; }
+
+  .fun-fact {
+    margin-top: 0.75rem;
+    background: var(--green-faint);
+    border-left: 3px solid var(--green-light);
+    padding: 8px 12px;
+    border-radius: 0 8px 8px 0;
+    font-size: 12.5px;
+    color: var(--green-dark);
+    line-height: 1.5;
+  }
+  .fun-fact-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--green-light);
+    margin-bottom: 3px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--green-dark);
+    color: var(--green-pale);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 640px) {
+    .frog-card { grid-template-columns: 1fr; }
+    .card-visual { border-left: none; border-bottom: 1px solid #e8f0ea; padding: 1.5rem; }
+    .card-body { padding: 1.25rem; border-left: none; }
+    .info-grid { grid-template-columns: 1fr; }
+    .stats-bar { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1 id="page-title">Encyklopedie žab</h1>
+    <p id="page-sub">Prozkoumej svět žab — jejich schopnosti, výskyt a zajímavosti</p>
+    <div class="lang-bar">
+      <button class="lang-btn active" onclick="setLang('cs')" id="btn-cs">🇨🇿 Česky</button>
+      <button class="lang-btn" onclick="setLang('en')" id="btn-en">🇬🇧 English</button>
+    </div>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">6</div><div class="stat-label" id="stat-frogs">Druhů žab</div></div>
+  <div class="stat"><div class="stat-num">5</div><div class="stat-label" id="stat-cont">Kontinentů</div></div>
+  <div class="stat"><div class="stat-num">7000+</div><div class="stat-label" id="stat-world">Druhů na světě</div></div>
+</div>
+
+<div class="container">
+  <h2 class="section-heading" id="section-all">Všechny žáby</h2>
+  <div class="frog-grid" id="frog-grid"></div>
+</div>
+
+<footer id="footer-text">Encyklopedie žab · Přepněte jazyk tlačítky výše</footer>
+
+<script>
+const T = {
+  cs: {
+    pageTitle: "Encyklopedie žab",
+    pageSub: "Prozkoumej svět žab — jejich schopnosti, výskyt a zajímavosti",
+    statFrogs: "Druhů žab",
+    statCont: "Kontinentů",
+    statWorld: "Druhů na světě",
+    sectionAll: "Všechny žáby",
+    abilities: "Schopnosti",
+    habitat: "Prostředí",
+    funFact: "Zajímavost",
+    diet: "Potrava",
+    size: "Velikost",
+    footer: "Encyklopedie žab · Přepněte jazyk tlačítky výše"
+  },
+  en: {
+    pageTitle: "Frog Encyclopedia",
+    pageSub: "Explore the world of frogs — their abilities, habitats, and fun facts",
+    statFrogs: "Frog species",
+    statCont: "Continents",
+    statWorld: "Species worldwide",
+    sectionAll: "All Frogs",
+    abilities: "Abilities",
+    habitat: "Habitat",
+    funFact: "Fun fact",
+    diet: "Diet",
+    size: "Size",
+    footer: "Frog Encyclopedia · Switch language with the buttons above"
+  }
+};
+
+const frogs = [
+  {
+    icon: "🐸",
+    bg: "#e8f5ec", tagBg: "#c2dfc8", tagColor: "#1a3a2a", namColor: "#1a3a2a",
+    name: { cs: "Rosnička zelená", en: "European Tree Frog" },
+    sci: "Hyla arborea",
+    tags: { cs: ["Lezec", "Zpěvák", "Evropa"], en: ["Climber", "Vocalist", "Europe"] },
+    desc: {
+      cs: "Malá žabka s přísavkami na prstech, díky nimž šplhá po listech a větvích. Je skvělým barometrem — před deštěm hlasitě krákají.",
+      en: "A tiny frog with sticky toe pads for climbing leaves and branches. Known as a natural barometer — they croak loudly before rain."
+    },
+    abilities: {
+      cs: ["Leze po svislých plochách díky přísavkám", "Mění barvu kůže (zelená až hnědá)", "Skáče až 150× délku těla", "Volání slyšitelné na 1 km"],
+      en: ["Climbs vertical surfaces with adhesive toe pads", "Changes skin color (green to brown)", "Jumps up to 150× its body length", "Calls audible up to 1 km away"]
+    },
+    habitat: { cs: "Rákosiny, keře u vody, lesní okraje", en: "Reed beds, shrubs near water, forest edges" },
+    diet: { cs: "Hmyz, pavouci, malí červi", en: "Insects, spiders, small worms" },
+    size: { cs: "3–5 cm", en: "3–5 cm" },
+    funFact: { cs: "Hibernuje pod kůrou stromů nebo v bahně na dně rybníků.", en: "Hibernates under tree bark or in mud at the bottom of ponds." }
+  },
+  {
+    icon: "🔴",
+    bg: "#fdecea", tagBg: "#f5c0b8", tagColor: "#7a1a10", namColor: "#7a1a10",
+    name: { cs: "Pralesnička barvitá", en: "Poison Dart Frog" },
+    sci: "Dendrobates tinctorius",
+    tags: { cs: ["Jedovatá", "Tropická", "Barevná"], en: ["Toxic", "Tropical", "Colorful"] },
+    desc: {
+      cs: "Jedni z nejjedovatějších obojživelníků světa. Jasné barvy slouží jako varování predátorům — aposematismus.",
+      en: "Among the most toxic amphibians on Earth. Their vivid colors warn predators to stay away — a phenomenon called aposematism."
+    },
+    abilities: {
+      cs: ["Produkuje alkaloidní jedy z kůže", "Zbarvení odpuzuje predátory", "Nese vajíčka na zádech k vodě", "Výborná prostorová paměť"],
+      en: ["Secretes alkaloid toxins through skin", "Bright coloration deters predators", "Carries eggs on its back to water", "Excellent spatial memory"]
+    },
+    habitat: { cs: "Deštné pralesy Střední a Jižní Ameriky", en: "Rainforests of Central and South America" },
+    diet: { cs: "Mravenci, termiti, roztoči", en: "Ants, termites, mites" },
+    size: { cs: "1,5–6 cm", en: "1.5–6 cm" },
+    funFact: { cs: "V zajetí ztrácí jedovatost — chybí jim specifický hmyz z divoké přírody.", en: "In captivity they lose their toxicity due to the absence of specific wild insects." }
+  },
+  {
+    icon: "💧",
+    bg: "#e6f0fb", tagBg: "#b5d0f0", tagColor: "#0c3a6e", namColor: "#0c3a6e",
+    name: { cs: "Žába Surina", en: "Surinam Toad" },
+    sci: "Pipa pipa",
+    tags: { cs: ["Vodní", "Plochá", "Jih Ameriky"], en: ["Aquatic", "Flat", "South America"] },
+    desc: {
+      cs: "Extrémně plochá žaba bez jazyka ani zubů. Mláďata se vyvíjejí přímo v dírách na matčiných zádech.",
+      en: "An extremely flat frog with no tongue or teeth. Young develop inside pockets on the mother's back."
+    },
+    abilities: {
+      cs: ["Cítí pohyb ve vodě díky postranní čáře", "Polyká kořist celou bez žvýkání", "Mláďata vylézají ze zad matky", "Maskuje se jako listí"],
+      en: ["Detects movement via lateral line", "Swallows prey whole without chewing", "Young emerge as froglets from mother's back", "Excellent leaf-litter camouflage"]
+    },
+    habitat: { cs: "Pomalu tekoucí řeky a bažiny Amazonie", en: "Slow-moving rivers and swamps of Amazonia" },
+    diet: { cs: "Ryby, červi, korýši", en: "Fish, worms, crustaceans" },
+    size: { cs: "10–17 cm", en: "10–17 cm" },
+    funFact: { cs: "Nemá jazyk — kořist chytá předními tlapkami a strká si ji do úst.", en: "It has no tongue — it uses its front legs to push prey into its mouth." }
+  },
+  {
+    icon: "🟤",
+    bg: "#f5f0e8", tagBg: "#ddd0b8", tagColor: "#4a3010", namColor: "#4a3010",
+    name: { cs: "Ropucha obecná", en: "Common Toad" },
+    sci: "Bufo bufo",
+    tags: { cs: ["Suchozemská", "Noční", "Česká příroda"], en: ["Terrestrial", "Nocturnal", "Czech nature"] },
+    desc: {
+      cs: "Nejrozšířenější ropucha v Česku. V jarních nocích migruje stovky metrů ke svému rodnému rybníku.",
+      en: "The most widespread toad in Czechia. In spring nights it migrates hundreds of meters to return to its birth pond."
+    },
+    abilities: {
+      cs: ["Vylučuje toxin bufodienolid", "Naviguje k rodnému rybníku (magnetická navigace)", "Dýchá kůží i plícemi", "Přežívá sucho díky silné kůži"],
+      en: ["Secretes bufodienolide toxin", "Navigates back to birth pond (magnetic sense)", "Breathes through both skin and lungs", "Survives dry conditions via thick skin"]
+    },
+    habitat: { cs: "Lesy, zahrady, pole, parky po celé ČR", en: "Forests, gardens, fields, parks across Europe" },
+    diet: { cs: "Žížaly, slimáci, brouci, hmyz", en: "Earthworms, slugs, beetles, insects" },
+    size: { cs: "6–15 cm", en: "6–15 cm" },
+    funFact: { cs: "Samice ropuchy obecné může žít přes 40 let!", en: "Female common toads can live for over 40 years!" }
+  },
+  {
+    icon: "🌿",
+    bg: "#e2f4ea", tagBg: "#9fd8b4", tagColor: "#0a3d20", namColor: "#0a3d20",
+    name: { cs: "Létající žaba Wallaceova", en: "Wallace's Flying Frog" },
+    sci: "Rhacophorus nigropalmatus",
+    tags: { cs: ["Létá", "Stromová", "Borneo"], en: ["Glides", "Arboreal", "Borneo"] },
+    desc: {
+      cs: "Tato žaba skutečně létá! Pomocí obrovských plovacích blan klouzá vzduchem z větve na větev v korunách džungle.",
+      en: "This frog actually flies! Using enormous webbing between its toes it glides through the air from branch to branch in jungle canopies."
+    },
+    abilities: {
+      cs: ["Plachtí až 15 metrů vzduchem", "Přistává na kůře stromů díky přísavkám", "Staví pěnová hnízda nad vodou", "Vidí téměř 360°"],
+      en: ["Glides up to 15 meters through the air", "Lands on bark using adhesive pads", "Builds foam nests above water", "Nearly 360° field of vision"]
+    },
+    habitat: { cs: "Tropické pralesy Bornea a Malajsie", en: "Tropical forests of Borneo and Malaysia" },
+    diet: { cs: "Hmyz, malí pavouci", en: "Insects, small spiders" },
+    size: { cs: "8–10 cm", en: "8–10 cm" },
+    funFact: { cs: "Pojmenovaná po Alfredu Russelu Wallaceovi, spoluzakladateli evoluční teorie.", en: "Named after Alfred Russel Wallace, co-founder of evolutionary theory." }
+  },
+  {
+    icon: "❄️",
+    bg: "#eeecfe", tagBg: "#ccc8f0", tagColor: "#2e1a7a", namColor: "#2e1a7a",
+    name: { cs: "Lesní žába dřevěná", en: "Wood Frog" },
+    sci: "Rana sylvatica",
+    tags: { cs: ["Mráz", "Arktická", "Severní Amerika"], en: ["Freeze", "Arctic", "North America"] },
+    desc: {
+      cs: "Jediný obojživelník žijící za polárním kruhem. V zimě se doslova zmrazí — přestane mu bít srdce — a na jaře oživne.",
+      en: "The only amphibian north of the Arctic Circle. In winter it literally freezes solid — heart stops — and thaws back to life in spring."
+    },
+    abilities: {
+      cs: ["Přežívá zmrznutí celého těla (kryoprotektanty)", "Srdce se zastaví a znovu nastartuje", "Rozmnožuje se krátce po roztání sněhu", "Extrémně rychlé skoky po probuzení"],
+      en: ["Survives full-body freezing (cryoprotectants)", "Heart stops completely and restarts", "Reproduces shortly after snow melts", "Extremely fast jumps upon waking"]
+    },
+    habitat: { cs: "Boreální lesy, tundra za polárním kruhem", en: "Boreal forests, tundra above the Arctic Circle" },
+    diet: { cs: "Hmyz, červi, malí korýši", en: "Insects, worms, small crustaceans" },
+    size: { cs: "3,5–8 cm", en: "3.5–8 cm" },
+    funFact: { cs: "Tělo obsahuje přes zimu více glukózy než krev diabetického člověka — chrání buňky před poškozením mrazem.", en: "Its winter body contains more glucose than a diabetic person's blood — protecting cells from freeze damage." }
+  }
+];
+
+let lang = 'cs';
+
+function setLang(l) {
+  lang = l;
+  document.getElementById('btn-cs').classList.toggle('active', l === 'cs');
+  document.getElementById('btn-en').classList.toggle('active', l === 'en');
+  document.documentElement.lang = l;
+  const t = T[l];
+  document.getElementById('page-title').textContent = t.pageTitle;
+  document.getElementById('page-sub').textContent = t.pageSub;
+  document.getElementById('stat-frogs').textContent = t.statFrogs;
+  document.getElementById('stat-cont').textContent = t.statCont;
+  document.getElementById('stat-world').textContent = t.statWorld;
+  document.getElementById('section-all').textContent = t.sectionAll;
+  document.getElementById('footer-text').textContent = t.footer;
+  renderFrogs();
+}
+
+function renderFrogs() {
+  const t = T[lang];
+  document.getElementById('frog-grid').innerHTML = frogs.map(f => `
+    <div class="frog-card">
+      <div class="card-visual" style="background:${f.bg}">
+        <div class="frog-emoji">${f.icon}</div>
+        <div class="frog-name-main" style="color:${f.namColor}">${f.name[lang]}</div>
+        <div class="frog-sci">${f.sci}</div>
+        <div class="tags">
+          ${f.tags[lang].map(tag => `<span class="tag" style="background:${f.tagBg};color:${f.tagColor}">${tag}</span>`).join('')}
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="frog-desc">${f.desc[lang]}</p>
+        <div class="info-grid">
+          <div class="info-block">
+            <div class="info-label">${t.abilities}</div>
+            <ul class="ability-list">
+              ${f.abilities[lang].map(a => `<li>${a}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="info-block">
+            <div class="meta-item">
+              <div class="info-label">${t.habitat}</div>
+              <div class="meta-val">${f.habitat[lang]}</div>
+            </div>
+            <div class="meta-item">
+              <div class="info-label">${t.diet}</div>
+              <div class="meta-val">${f.diet[lang]}</div>
+            </div>
+            <div class="meta-item">
+              <div class="info-label">${t.size}</div>
+              <div class="meta-val">${f.size[lang]}</div>
+            </div>
+            <div class="fun-fact">
+              <div class="fun-fact-label">${t.funFact}</div>
+              ${f.funFact[lang]}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+renderFrogs();
+</script>
+</body>
+</html>
