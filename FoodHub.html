@@ -1,0 +1,406 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Sans:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --brand: #FF4D00;
+    --brand2: #FFB800;
+    --dark: #1A1009;
+    --card: #FFF8F0;
+    --radius: 16px;
+  }
+
+  #app { font-family: 'DM Sans', sans-serif; background: #FFF3E8; min-height: 600px; position: relative; overflow: hidden; }
+
+  .topbar {
+    background: var(--dark);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-family: 'Fraunces', serif; color: #fff; font-size: 22px; font-weight: 900; letter-spacing: -0.5px; }
+  .logo span { color: var(--brand2); }
+  .cart-btn {
+    background: var(--brand);
+    border: none; border-radius: 50px;
+    color: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    padding: 8px 16px; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cart-count {
+    background: var(--brand2); color: var(--dark);
+    border-radius: 50%; width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, #3D1A00 100%);
+    padding: 24px 20px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -30px; right: -30px;
+    width: 160px; height: 160px;
+    background: var(--brand); opacity: 0.15;
+    border-radius: 50%;
+  }
+  .hero h1 { font-family: 'Fraunces', serif; color: #fff; font-size: 28px; font-weight: 900; line-height: 1.1; }
+  .hero h1 span { color: var(--brand2); }
+  .hero p { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 6px; }
+
+  .categories {
+    display: flex; gap: 8px; overflow-x: auto;
+    padding: 14px 20px 6px; scrollbar-width: none;
+  }
+  .cat-btn {
+    white-space: nowrap; border: 1.5px solid #E8D5C0;
+    background: var(--card); border-radius: 50px;
+    padding: 7px 14px; font-size: 13px; font-weight: 500;
+    cursor: pointer; color: #7A5C40; transition: all 0.15s;
+  }
+  .cat-btn.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+  .section-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--dark); padding: 10px 20px 6px; }
+
+  .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 16px 16px; }
+
+  .food-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1.5px solid #F0DDD0;
+    overflow: hidden; cursor: pointer;
+    transition: transform 0.15s;
+    position: relative;
+  }
+  .food-card:active { transform: scale(0.97); }
+  .food-emoji { font-size: 52px; text-align: center; padding: 18px 8px 10px; background: #FFF0E0; }
+  .food-info { padding: 10px; }
+  .food-name { font-size: 13px; font-weight: 600; color: var(--dark); line-height: 1.3; }
+  .food-price { font-size: 14px; font-weight: 700; color: var(--brand); margin-top: 4px; }
+  .food-desc { font-size: 11px; color: #9A7A60; margin-top: 2px; }
+  .add-btn {
+    position: absolute; bottom: 10px; right: 10px;
+    background: var(--brand); border: none; border-radius: 50%;
+    width: 28px; height: 28px; color: #fff; font-size: 18px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+
+  .worker-toggle {
+    position: fixed; bottom: 20px; right: 20px;
+    background: var(--dark); border: none; border-radius: 50px;
+    padding: 12px 18px; color: #fff; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.35); z-index: 100;
+  }
+  .worker-dot { width: 8px; height: 8px; background: #22C55E; border-radius: 50%; }
+
+  .worker-panel {
+    position: fixed; inset: 0;
+    background: rgba(26,16,9,0.7);
+    z-index: 200; display: flex; align-items: flex-end;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .worker-panel.open { opacity: 1; pointer-events: all; }
+  .worker-sheet {
+    background: var(--dark); width: 100%; border-radius: 20px 20px 0 0;
+    padding: 20px; max-height: 80vh; overflow-y: auto;
+    transform: translateY(100%); transition: transform 0.25s ease-out;
+  }
+  .worker-panel.open .worker-sheet { transform: translateY(0); }
+
+  .ws-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .ws-title { font-family: 'Fraunces', serif; color: #fff; font-size: 20px; font-weight: 700; }
+  .ws-close { background: #3A2010; border: none; border-radius: 50%; width: 32px; height: 32px; color: #fff; font-size: 18px; cursor: pointer; }
+
+  .order-list { display: flex; flex-direction: column; gap: 10px; }
+  .order-card {
+    background: #2A1508; border-radius: 12px; padding: 14px;
+    border: 1px solid #4A2A10;
+  }
+  .order-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .order-id { font-size: 12px; color: var(--brand2); font-weight: 600; }
+  .order-status {
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 50px;
+  }
+  .status-new { background: rgba(255,77,0,0.2); color: var(--brand); }
+  .status-making { background: rgba(255,184,0,0.2); color: var(--brand2); }
+  .status-done { background: rgba(34,197,94,0.2); color: #22C55E; }
+  .order-items { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 6px; }
+  .order-total { font-size: 14px; font-weight: 700; color: #fff; margin-top: 6px; }
+  .status-btns { display: flex; gap: 8px; margin-top: 10px; }
+  .status-btn {
+    flex: 1; border: 1px solid #4A2A10; background: transparent;
+    color: rgba(255,255,255,0.6); font-size: 12px; border-radius: 8px;
+    padding: 7px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .status-btn:hover { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+  .ws-empty { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.4); font-size: 14px; }
+
+  .cart-sheet {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 150;
+    display: flex; align-items: flex-end;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  }
+  .cart-sheet.open { opacity: 1; pointer-events: all; }
+  .cart-inner {
+    background: #fff; width: 100%; border-radius: 20px 20px 0 0;
+    padding: 20px; max-height: 70vh; overflow-y: auto;
+    transform: translateY(100%); transition: transform 0.25s ease-out;
+  }
+  .cart-sheet.open .cart-inner { transform: translateY(0); }
+
+  .cart-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 16px; }
+  .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F0E0D0; }
+  .ci-name { font-size: 14px; font-weight: 500; color: var(--dark); }
+  .ci-price { font-size: 14px; font-weight: 700; color: var(--brand); }
+  .ci-remove { background: none; border: none; color: #C0A090; cursor: pointer; font-size: 16px; }
+  .cart-total { font-size: 16px; font-weight: 700; color: var(--dark); padding: 12px 0; }
+  .order-btn {
+    width: 100%; background: var(--brand); border: none; border-radius: 12px;
+    color: #fff; font-size: 15px; font-weight: 700; padding: 14px;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    margin-top: 8px;
+  }
+
+  .toast {
+    position: fixed; top: 70px; left: 50%; transform: translateX(-50%) translateY(-20px);
+    background: var(--dark); color: #fff; font-size: 13px; font-weight: 500;
+    padding: 10px 20px; border-radius: 50px; opacity: 0;
+    transition: all 0.3s; z-index: 999; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+
+<div id="app">
+  <div class="topbar">
+    <div class="logo">FoodHub<span>ZP</span></div>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+
+  <div class="hero">
+    <h1>Hungry? <br><span>Order now.</span></h1>
+    <p>Fresh food delivered fast 🔥</p>
+  </div>
+
+  <div class="categories">
+    <button class="cat-btn active" onclick="filterCat(this,'all')">All</button>
+    <button class="cat-btn" onclick="filterCat(this,'icecream')">🍦 Ice Cream</button>
+    <button class="cat-btn" onclick="filterCat(this,'fries')">🍟 Fries</button>
+    <button class="cat-btn" onclick="filterCat(this,'burgers')">🍔 Burgers</button>
+    <button class="cat-btn" onclick="filterCat(this,'drinks')">🥤 Drinks</button>
+    <button class="cat-btn" onclick="filterCat(this,'pizza')">🍕 Pizza</button>
+  </div>
+
+  <div class="section-title" id="sectionTitle">All Items</div>
+
+  <div class="menu-grid" id="menuGrid"></div>
+</div>
+
+<button class="worker-toggle" onclick="openWorker()">
+  <span class="worker-dot"></span> Workers Panel
+</button>
+
+<div class="worker-panel" id="workerPanel">
+  <div class="worker-sheet">
+    <div class="ws-header">
+      <div class="ws-title">👷 Orders Queue</div>
+      <button class="ws-close" onclick="closeWorker()">✕</button>
+    </div>
+    <div class="order-list" id="orderList">
+      <div class="ws-empty" id="emptyMsg">No orders yet. Waiting...</div>
+    </div>
+  </div>
+</div>
+
+<div class="cart-sheet" id="cartSheet">
+  <div class="cart-inner">
+    <div class="cart-title">🛒 Your Order</div>
+    <div id="cartItems"></div>
+    <div class="cart-total" id="cartTotalEl"></div>
+    <button class="order-btn" onclick="placeOrder()">Place Order →</button>
+    <button class="order-btn" style="background:#f0e0d0;color:var(--dark);margin-top:8px;" onclick="closeCart()">Keep Shopping</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.7.1/firebase-database-compat.min.js"></script>
+<script>
+const fbConfig = {
+  appId: "1:606535573991:web:4b4d136b046b0c65a15d42",
+  databaseURL: "https://foodhubzp-default-rtdb.firebaseio.com",
+  projectId: "foodhubzp",
+  apiKey: "AIzaSyPlaceholderKeyForDemo"
+};
+
+let db = null;
+try {
+  if (!firebase.apps.length) firebase.initializeApp(fbConfig);
+  db = firebase.database();
+} catch(e) { console.log("Firebase init:", e.message); }
+
+const menu = [
+  { id:1, name:"Vanilla Soft Serve", emoji:"🍦", price:3.50, cat:"icecream", desc:"Classic & creamy" },
+  { id:2, name:"Choco Sundae", emoji:"🍨", price:4.80, cat:"icecream", desc:"With hot fudge" },
+  { id:3, name:"Crispy Fries", emoji:"🍟", price:2.99, cat:"fries", desc:"Golden & salted" },
+  { id:4, name:"Loaded Fries", emoji:"🧀", price:4.50, cat:"fries", desc:"Cheese & bacon" },
+  { id:5, name:"Classic Burger", emoji:"🍔", price:6.99, cat:"burgers", desc:"Double patty" },
+  { id:6, name:"Chicken Burger", emoji:"🫓", price:6.50, cat:"burgers", desc:"Crispy chicken" },
+  { id:7, name:"Cola Large", emoji:"🥤", price:1.99, cat:"drinks", desc:"Ice cold" },
+  { id:8, name:"Lemonade", emoji:"🍋", price:2.50, cat:"drinks", desc:"Fresh squeezed" },
+  { id:9, name:"Pepperoni Pizza", emoji:"🍕", price:9.99, cat:"pizza", desc:"12 inch" },
+  { id:10, name:"Mango Sorbet", emoji:"🍧", price:3.99, cat:"icecream", desc:"Tropical vibes" },
+  { id:11, name:"Sweet Potato Fries", emoji:"🍠", price:3.50, cat:"fries", desc:"With dip" },
+  { id:12, name:"Milkshake", emoji:"🥛", price:4.20, cat:"drinks", desc:"Strawberry / Vanilla" },
+];
+
+let cart = [];
+let orders = [];
+let activeCat = 'all';
+let orderCounter = 1;
+
+function renderMenu(cat) {
+  const grid = document.getElementById('menuGrid');
+  const items = cat === 'all' ? menu : menu.filter(i => i.cat === cat);
+  grid.innerHTML = items.map(item => `
+    <div class="food-card">
+      <div class="food-emoji">${item.emoji}</div>
+      <div class="food-info">
+        <div class="food-name">${item.name}</div>
+        <div class="food-desc">${item.desc}</div>
+        <div class="food-price">€${item.price.toFixed(2)}</div>
+      </div>
+      <button class="add-btn" onclick="addToCart(${item.id})">+</button>
+    </div>
+  `).join('');
+}
+
+function filterCat(btn, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeCat = cat;
+  const titles = {all:'All Items',icecream:'Ice Cream',fries:'Fries',burgers:'Burgers',drinks:'Drinks',pizza:'Pizza'};
+  document.getElementById('sectionTitle').textContent = titles[cat] || 'Menu';
+  renderMenu(cat);
+}
+
+function addToCart(id) {
+  const item = menu.find(i => i.id === id);
+  cart.push({...item, uid: Date.now() + Math.random()});
+  document.getElementById('cartCount').textContent = cart.length;
+  showToast(item.emoji + ' Added: ' + item.name);
+}
+
+function openCart() { document.getElementById('cartSheet').classList.add('open'); renderCartUI(); }
+function closeCart() { document.getElementById('cartSheet').classList.remove('open'); }
+function openWorker() { document.getElementById('workerPanel').classList.add('open'); }
+function closeWorker() { document.getElementById('workerPanel').classList.remove('open'); }
+
+function renderCartUI() {
+  const el = document.getElementById('cartItems');
+  if (!cart.length) { el.innerHTML = '<p style="color:#9A7A60;padding:20px 0;text-align:center">Your cart is empty</p>'; document.getElementById('cartTotalEl').textContent=''; return; }
+  el.innerHTML = cart.map(i => `
+    <div class="cart-item">
+      <span class="ci-name">${i.emoji} ${i.name}</span>
+      <span style="display:flex;align-items:center;gap:8px">
+        <span class="ci-price">€${i.price.toFixed(2)}</span>
+        <button class="ci-remove" onclick="removeFromCart('${i.uid}')">✕</button>
+      </span>
+    </div>`).join('');
+  const total = cart.reduce((s,i) => s + i.price, 0);
+  document.getElementById('cartTotalEl').textContent = 'Total: €' + total.toFixed(2);
+}
+
+function removeFromCart(uid) {
+  cart = cart.filter(i => i.uid != uid);
+  document.getElementById('cartCount').textContent = cart.length;
+  renderCartUI();
+}
+
+function placeOrder() {
+  if (!cart.length) { showToast('Cart is empty!'); return; }
+  const total = cart.reduce((s,i) => s + i.price, 0);
+  const order = {
+    id: 'ORD-' + String(orderCounter++).padStart(3,'0'),
+    items: cart.map(i => i.emoji + ' ' + i.name).join(', '),
+    total: '€' + total.toFixed(2),
+    status: 'new',
+    time: new Date().toLocaleTimeString()
+  };
+
+  if (db) {
+    db.ref('orders/' + order.id).set(order).catch(()=>{});
+  }
+
+  orders.unshift(order);
+  cart = [];
+  document.getElementById('cartCount').textContent = 0;
+  closeCart();
+  renderOrders();
+  showToast('✅ Order placed! ' + order.id);
+}
+
+function renderOrders() {
+  const el = document.getElementById('orderList');
+  const emptyMsg = document.getElementById('emptyMsg');
+  if (!orders.length) { emptyMsg.style.display='block'; el.innerHTML='<div class="ws-empty" id="emptyMsg">No orders yet. Waiting...</div>'; return; }
+  el.innerHTML = orders.map(o => `
+    <div class="order-card" id="oc-${o.id}">
+      <div class="order-top">
+        <span class="order-id">${o.id} · ${o.time}</span>
+        <span class="order-status status-${o.status}">${statusLabel(o.status)}</span>
+      </div>
+      <div class="order-items">${o.items}</div>
+      <div class="order-total">${o.total}</div>
+      <div class="status-btns">
+        <button class="status-btn" onclick="setStatus('${o.id}','new')">New</button>
+        <button class="status-btn" onclick="setStatus('${o.id}','making')">Making</button>
+        <button class="status-btn" onclick="setStatus('${o.id}','done')">Done ✓</button>
+      </div>
+    </div>`).join('');
+}
+
+function statusLabel(s) {
+  return {new:'🔴 New', making:'🟡 Making', done:'✅ Done'}[s] || s;
+}
+
+function setStatus(id, status) {
+  const o = orders.find(o => o.id === id);
+  if (!o) return;
+  o.status = status;
+  if (db) db.ref('orders/' + id + '/status').set(status).catch(()=>{});
+  renderOrders();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+if (db) {
+  db.ref('orders').on('value', snap => {
+    const data = snap.val();
+    if (data) {
+      orders = Object.values(data).reverse();
+      renderOrders();
+    }
+  });
+}
+
+renderMenu('all');
+</script>
